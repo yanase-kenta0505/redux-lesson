@@ -1,25 +1,28 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 const Post = () => {
-  const [posts, setPosts] = useState([]);
+  const dispatch = useDispatch();
+  const posts = useSelector((state) => state.posts);
 
   useEffect(() => {
-    const getPosts = async () => {
+    const getposts = async () => {
       const res = await fetch("https://jsonplaceholder.typicode.com/posts");
       const data = await res.json();
-      setPosts(data);
+      dispatch({
+        type: "Get_POST_DATA",
+        payload: data,
+      });
     };
-    getPosts();
-  }, []);
+    getposts();
+  }, [dispatch]);
 
   return (
-    <div>
-      <ul>
-        {posts.map((post) => {
-          return <li key={post.id}>{post.title}</li>;
-        })}
-      </ul>
-    </div>
+    <ul>
+      {posts.map((post) => (
+        <li key={post.id}>{post.title}</li>
+      ))}
+    </ul>
   );
 };
 
